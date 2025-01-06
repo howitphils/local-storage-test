@@ -61,10 +61,33 @@ button:hover {
   outline: none;
   box-shadow: 1px 1px 5px #beb3b3;
 }
+.task-input:focus {
+  box-shadow: 5px 5px 20px #cabfbf;
+}
 
 .submit-task-btn {
   width: 30%;
   align-self: center;
+}
+
+.close-form-dialog {
+  justify-self: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  width: 15%;
+  text-align: center;
+  margin-top: 30%;
+  padding: 20px;
+  border-radius: 5px;
+  border: 2px solid #beb3b3;
+}
+
+.dialog-buttons-container {
+  display: flex;
+  gap: 20px;
 }
 
 .hidden {

@@ -24,6 +24,13 @@
           Add
         </button>
       </form>
+      <dialog class="close-form-dialog" id="close-form-dialog">
+        <h3>Are you sure?</h3>
+        <div class="dialog-buttons-container">
+          <button id="dialog-close-btn">Close</button>
+          <button id="dialog-cancel-btn">Cancel</button>
+        </div>
+      </dialog>
     </div>
 
     <script>
@@ -33,6 +40,9 @@
       const taskInput = document.getElementById("task");
       const submitTaskBtn = document.getElementById("submit-task");
       const taskList = document.getElementById("task-list");
+      const closeFormDialog = document.getElementById("close-form-dialog");
+      const dialogCloseBtn = document.getElementById("dialog-close-btn");
+      const dialogCancelBtn = document.getElementById("dialog-cancel-btn");
       const tasks = [];
 
       addTaskBtn.addEventListener("click", () => {
@@ -41,8 +51,9 @@
       });
 
       closeFormBtn.addEventListener("click", () => {
-        taskForm.classList.add("hidden");
-        taskList.classList.remove("hidden");
+        closeFormDialog.showModal();
+        // taskForm.classList.add("hidden");
+        // taskList.classList.remove("hidden");
       });
 
       taskForm.addEventListener("submit", (e) => {
@@ -52,7 +63,6 @@
         tasks.push(task);
         taskInput.value = "";
         taskForm.classList.add("hidden");
-        console.log(tasks);
         renderTasks();
       });
 
