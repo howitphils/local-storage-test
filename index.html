@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>TodoApp</title>
+  </head>
+  <body>
+    <div class="wrapper">
+      <button class="add-task-btn" id="add-task">Add new Task</button>
+      <ul class="task-list" id="task-list"></ul>
+      <form class="task-form hidden" id="task-form">
+        <button class="close-form-btn" id="close-form-btn">x</button>
+        <input
+          type="text"
+          id="task"
+          name="task"
+          class="task-input"
+          required
+          placeholder="Enter your task"
+        />
+        <button type="submit" class="submit-task-btn" id="submit-task">
+          Add
+        </button>
+      </form>
+    </div>
+
+    <script>
+      const addTaskBtn = document.getElementById("add-task");
+      const taskForm = document.getElementById("task-form");
+      const closeFormBtn = document.getElementById("close-form-btn");
+      const taskInput = document.getElementById("task");
+      const submitTaskBtn = document.getElementById("submit-task");
+      const taskList = document.getElementById("task-list");
+      const tasks = [];
+
+      addTaskBtn.addEventListener("click", () => {
+        taskForm.classList.remove("hidden");
+        taskList.classList.add("hidden");
+      });
+
+      closeFormBtn.addEventListener("click", () => {
+        taskForm.classList.add("hidden");
+        taskList.classList.remove("hidden");
+      });
+
+      taskForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const task = taskInput.value;
+        if (task.trim() === "") return;
+        tasks.push(task);
+        taskInput.value = "";
+        taskForm.classList.add("hidden");
+        console.log(tasks);
+        renderTasks();
+      });
+
+      function renderTasks() {
+        taskList.innerHTML = "";
+
+        tasks.forEach((task, index) => {
+          const taskItem = document.createElement("li");
+          taskItem.textContent = task;
+          taskList.appendChild(taskItem);
+        });
+
+        taskList.classList.remove("hidden");
+      }
+    </script>
+  </body>
+</html>
