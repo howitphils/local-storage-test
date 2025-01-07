@@ -77,8 +77,7 @@
       // Обработчик клика по кнопке закрытия формы (X)
       closeFormBtn.addEventListener("click", () => {
         if (taskInput.value.trim() === "") {
-          taskForm.classList.add("hidden"); // Скрываем форму
-          taskList.classList.remove("hidden"); // Показываем список задач
+          reset(); // Очищаем форму и показываем список задач
           return;
         }
         closeFormDialog.showModal(); // Показываем диалоговое окно подтверждения
@@ -87,40 +86,20 @@
       // Обработчик клика по кнопке "Close" в диалоговом окне
       dialogCloseBtn.addEventListener("click", () => {
         closeFormDialog.close(); // Закрываем диалоговое окно
-        taskInput.value = ""; // Очищаем поле ввода
-        taskForm.classList.add("hidden"); // Скрываем форму
-        taskList.classList.remove("hidden"); // Показываем список задач
+        reset(); // Очищаем форму и показываем список задач
       });
 
       // Обработчик клика по кнопке "Cancel" в диалоговом окне
       dialogCancelBtn.addEventListener("click", () => {
-        closeFormDialog.close();
-        // closeFormDialog.close(); // Просто закрываем диалоговое окно
+        closeFormDialog.close(); // Просто закрываем диалоговое окно
       });
 
       // Обработчик отправки формы
       taskForm.addEventListener("submit", (e) => {
         e.preventDefault(); // Предотвращаем стандартную отправку формы
-        if (taskInput.value.trim() === "") {
-          // Проверка на пустую строку
-          error.innerText = "Task cannot be empty!"; // Выводим ошибку
-          taskInput.value = ""; // Очищаем поле ввода
-          return;
-        } else if (
-          tasks.findIndex((task) => task.text === newTask.text) !== -1 // Проверка на существующую задачу
-        ) {
-          error.innerText = "Task already exists!"; // Выводим ошибку
-          return;
-        }
-        const newTask = {
-          id: taskInput.value + Date.now(),
-          text: taskInput.value,
-          completed: false,
-        };
-        tasks.unshift(newTask); // Добавляем задачу в массив
-        taskInput.value = ""; // Очищаем поле ввода
-        error.innerText = ""; // Очищаем сообщение об ошибке
-        taskForm.classList.add("hidden"); // Скрываем форму
+        const isSuccessful = createNewTask(); // Создаем новую задачу и добавляем в массив
+        if (!isSuccessful) return; // Если задача не создана, то выводим ошибку и останавливаем выполнение
+        reset(); // Очищаем форму
         renderTasks(); // Перерисовываем список задач
       });
 
@@ -146,12 +125,38 @@
           </div>
           `;
         });
-        taskList.classList.remove("hidden"); // Показываем список задач
       }
 
       function reset() {
-        taskInput.value = "";
-        error.innerText = "";
+        taskInput.value = ""; // Очищаем поле ввода
+        error.innerText = ""; // Очищаем ошибку
+        taskForm.classList.add("hidden"); // Скрываем форму
+        taskList.classList.remove("hidden"); // Показываем список задач
+      }
+
+      function createNewTask() {
+        if (taskInput.value.trim() === "") {
+          // Проверка на пустую строку
+          error.innerText = "Task cannot be empty!"; // Выводим ошибку
+          taskInput.value = ""; // Очищаем поле ввода
+          return false;
+        }
+
+        const newTask = {
+          // Создаем новую задачу
+          id: taskInput.value + Date.now(),
+          text: taskInput.value.trim(),
+          completed: false,
+        };
+
+        const isTaskExists = // Проверка на существующую задачу
+          tasks.findIndex((task) => task.text === newTask.text) !== -1;
+        if (isTaskExists) {
+          error.innerText = "Task already exists!"; // Выводим ошибку
+          return false;
+        }
+        tasks.unshift(newTask); // Добавляем задачу в массив
+        return true;
       }
     </script>
   </body>
