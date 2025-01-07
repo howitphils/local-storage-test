@@ -72,17 +72,20 @@ button:hover {
 
 .close-form-dialog {
   justify-self: center;
+  width: 15%;
+  margin-top: 20%;
+  padding: 20px;
+  border-radius: 5px;
+  border: 2px solid #beb3b3;
+}
+
+.close-form-dialog form {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 10px;
-  width: 15%;
   text-align: center;
-  margin-top: 30%;
-  padding: 20px;
-  border-radius: 5px;
-  border: 2px solid #beb3b3;
 }
 
 .dialog-buttons-container {

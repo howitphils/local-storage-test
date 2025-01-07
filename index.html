@@ -1,17 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <!-- Стандартные мета-теги для кодировки и адаптивности -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Подключение стилей -->
     <link rel="stylesheet" href="style.css" />
     <title>TodoApp</title>
   </head>
   <body>
+    <!-- Основной контейнер приложения -->
     <div class="wrapper">
+      <!-- Кнопка для добавления новой задачи -->
       <button class="add-task-btn" id="add-task">Add new Task</button>
+      <!-- Список для отображения задач -->
       <ul class="task-list" id="task-list"></ul>
+      <!-- Форма для ввода новой задачи (изначально скрыта) -->
       <form class="task-form hidden" id="task-form">
+        <!-- Кнопка закрытия формы -->
         <button class="close-form-btn" id="close-form-btn">x</button>
+        <!-- Поле ввода для задачи -->
         <input
           type="text"
           id="task"
@@ -20,20 +28,26 @@
           required
           placeholder="Enter your task"
         />
+        <!-- Кнопка подтверждения добавления задачи -->
         <button type="submit" class="submit-task-btn" id="submit-task">
           Add
         </button>
       </form>
+      <!-- Диалоговое окно подтверждения закрытия формы -->
       <dialog class="close-form-dialog" id="close-form-dialog">
-        <h3>Are you sure?</h3>
-        <div class="dialog-buttons-container">
-          <button id="dialog-close-btn">Close</button>
-          <button id="dialog-cancel-btn">Cancel</button>
-        </div>
+        <form method="dialog">
+          <h3>Are you sure?</h3>
+          <div class="dialog-buttons-container">
+            <!-- Кнопки управления диалоговым окном -->
+            <button id="dialog-close-btn">Close</button>
+            <button id="dialog-cancel-btn">Cancel</button>
+          </div>
+        </form>
       </dialog>
     </div>
 
     <script>
+      // Получаем ссылки на все необходимые DOM элементы
       const addTaskBtn = document.getElementById("add-task");
       const taskForm = document.getElementById("task-form");
       const closeFormBtn = document.getElementById("close-form-btn");
@@ -43,39 +57,57 @@
       const closeFormDialog = document.getElementById("close-form-dialog");
       const dialogCloseBtn = document.getElementById("dialog-close-btn");
       const dialogCancelBtn = document.getElementById("dialog-cancel-btn");
+
+      // Массив для хранения задач
       const tasks = [];
 
+      // Обработчик клика по кнопке "Add new Task"
       addTaskBtn.addEventListener("click", () => {
-        taskForm.classList.remove("hidden");
-        taskList.classList.add("hidden");
+        taskForm.classList.remove("hidden"); // Показываем форму
+        taskList.classList.add("hidden"); // Скрываем список задач
       });
 
+      // Обработчик клика по кнопке закрытия формы (X)
       closeFormBtn.addEventListener("click", () => {
-        closeFormDialog.showModal();
-        // taskForm.classList.add("hidden");
-        // taskList.classList.remove("hidden");
+        closeFormDialog.showModal(); // Показываем диалоговое окно подтверждения
       });
 
+      // Обработчик клика по кнопке "Close" в диалоговом окне
+      dialogCloseBtn.addEventListener("click", () => {
+        closeFormDialog.close(); // Закрываем диалоговое окно
+        taskForm.classList.add("hidden"); // Скрываем форму
+        taskList.classList.remove("hidden"); // Показываем список задач
+      });
+
+      // Обработчик клика по кнопке "Cancel" в диалоговом окне
+      dialogCancelBtn.addEventListener("click", () => {
+        closeFormDialog.close();
+        // closeFormDialog.close(); // Просто закрываем диалоговое окно
+      });
+
+      // Обработчик отправки формы
       taskForm.addEventListener("submit", (e) => {
-        e.preventDefault();
+        e.preventDefault(); // Предотвращаем стандартную отправку формы
         const task = taskInput.value;
-        if (task.trim() === "") return;
-        tasks.push(task);
-        taskInput.value = "";
-        taskForm.classList.add("hidden");
-        renderTasks();
+        if (task.trim() === "") return; // Проверка на пустую строку
+        tasks.push(task); // Добавляем задачу в массив
+        taskInput.value = ""; // Очищаем поле ввода
+        taskForm.classList.add("hidden"); // Скрываем форму
+        renderTasks(); // Перерисовываем список задач
       });
 
+      // Функция для отображения списка задач
       function renderTasks() {
-        taskList.innerHTML = "";
+        taskList.innerHTML = ""; // Очищаем текущий список
 
+        // Создаем элементы списка для каждой задачи
         tasks.forEach((task, index) => {
           const taskItem = document.createElement("li");
           taskItem.textContent = task;
           taskList.appendChild(taskItem);
         });
 
-        taskList.classList.remove("hidden");
+        taskList.classList.remove("hidden"); // Показываем список задач
       }
     </script>
   </body>
