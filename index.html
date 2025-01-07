@@ -22,14 +22,18 @@
           x
         </button>
         <!-- Поле ввода для задачи -->
-        <input
-          type="text"
-          id="task"
-          name="task"
-          class="task-input"
-          required
-          placeholder="Enter your task"
-        />
+        <div class="task-input-container">
+          <label for="task" class="task-label">Task:</label>
+          <input
+            type="text"
+            id="task"
+            name="task"
+            class="task-input"
+            required
+            placeholder="Enter your task"
+          />
+          <span id="error" class="error"></span>
+        </div>
         <!-- Кнопка подтверждения добавления задачи -->
         <button type="submit" class="submit-task-btn" id="submit-task">
           Add
@@ -38,7 +42,7 @@
       <!-- Диалоговое окно подтверждения закрытия формы -->
       <dialog class="close-form-dialog" id="close-form-dialog">
         <form method="dialog">
-          <h3>Are you sure?</h3>
+          <h3>Close without saving?</h3>
           <div class="dialog-buttons-container">
             <!-- Кнопки управления диалоговым окном -->
             <button id="dialog-close-btn" type="button">Close</button>
@@ -59,6 +63,7 @@
       const closeFormDialog = document.getElementById("close-form-dialog");
       const dialogCloseBtn = document.getElementById("dialog-close-btn");
       const dialogCancelBtn = document.getElementById("dialog-cancel-btn");
+      const error = document.getElementById("error");
 
       // Массив для хранения задач
       const tasks = [];
@@ -92,9 +97,18 @@
       taskForm.addEventListener("submit", (e) => {
         e.preventDefault(); // Предотвращаем стандартную отправку формы
         const task = taskInput.value;
-        if (task.trim() === "") return; // Проверка на пустую строку
+        if (task.trim() === "") {
+          // Проверка на пустую строку
+          error.innerText = "Task cannot be empty!"; // Выводим ошибку
+          taskInput.value = ""; // Очищаем поле ввода
+          return;
+        } else if (tasks.includes(task)) {
+          error.innerText = "Task already exists!";
+          return;
+        }
         tasks.push(task); // Добавляем задачу в массив
         taskInput.value = ""; // Очищаем поле ввода
+        error.innerText = ""; // Очищаем сообщение об ошибке
         taskForm.classList.add("hidden"); // Скрываем форму
         renderTasks(); // Перерисовываем список задач
       });

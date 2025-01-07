@@ -11,7 +11,7 @@ html {
   line-height: 1.6;
   width: 100%;
   height: 100%;
-  background: #f5f2f2;
+  background-color: #fafafa;
 }
 
 button {
@@ -32,8 +32,8 @@ button {
 
 button:hover {
   bottom: 2px;
-  background-color: #cabfbf;
-  box-shadow: 2px 2px 3px #a3a2a2;
+  background-color: #d3cbcb;
+  box-shadow: 2px 2px 3px #7b7a7a;
 }
 
 .wrapper {
@@ -52,6 +52,7 @@ button:hover {
   gap: 40px;
   padding: 15px;
   border-radius: 5px;
+  background-color: #f3f1f1;
   box-shadow: 0px 0px 5px #beb3b3;
 }
 
@@ -59,6 +60,16 @@ button:hover {
   width: 10%;
   align-self: flex-end;
   padding: 3px;
+}
+.task-input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.task-label {
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
 }
 .task-input {
   position: relative;
@@ -71,8 +82,13 @@ button:hover {
   transition: all 0.3s ease;
 }
 .task-input:focus {
-  box-shadow: 0px 0px 10px #cabfbf;
-  bottom: 3px;
+  box-shadow: 0px 0px 20px #cabfbf;
+  bottom: 2px;
+}
+.error {
+  color: red;
+  font-size: 12px;
+  align-self: center;
 }
 
 .submit-task-btn {
@@ -82,25 +98,24 @@ button:hover {
 
 .close-form-dialog {
   justify-self: center;
-  width: 15%;
+  width: 20%;
+  background-color: #f4f2f2;
   margin-top: 20%;
   padding: 20px;
   border-radius: 5px;
-  border: 2px solid #beb3b3;
+  border: 1px solid #beb3b3;
 }
-
 .close-form-dialog form {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 10px;
+  gap: 20px;
   text-align: center;
 }
-
 .dialog-buttons-container {
   display: flex;
-  gap: 20px;
+  gap: 30px;
 }
 
 .hidden {
