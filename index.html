@@ -76,6 +76,11 @@
 
       // Обработчик клика по кнопке закрытия формы (X)
       closeFormBtn.addEventListener("click", () => {
+        if (taskInput.value.trim() === "") {
+          taskForm.classList.add("hidden"); // Скрываем форму
+          taskList.classList.remove("hidden"); // Показываем список задач
+          return;
+        }
         closeFormDialog.showModal(); // Показываем диалоговое окно подтверждения
       });
 
@@ -96,17 +101,23 @@
       // Обработчик отправки формы
       taskForm.addEventListener("submit", (e) => {
         e.preventDefault(); // Предотвращаем стандартную отправку формы
-        const task = taskInput.value;
-        if (task.trim() === "") {
+        const newTask = {
+          id: taskInput.value + Date.now(),
+          text: taskInput.value,
+          completed: false,
+        };
+        if (taskInput.value.trim() === "") {
           // Проверка на пустую строку
           error.innerText = "Task cannot be empty!"; // Выводим ошибку
           taskInput.value = ""; // Очищаем поле ввода
           return;
-        } else if (tasks.includes(task)) {
-          error.innerText = "Task already exists!";
+        } else if (
+          tasks.findIndex((task) => task.text === newTask.text) !== -1 // Проверка на существующую задачу
+        ) {
+          error.innerText = "Task already exists!"; // Выводим ошибку
           return;
         }
-        tasks.push(task); // Добавляем задачу в массив
+        tasks.push(newTask); // Добавляем задачу в массив
         taskInput.value = ""; // Очищаем поле ввода
         error.innerText = ""; // Очищаем сообщение об ошибке
         taskForm.classList.add("hidden"); // Скрываем форму
@@ -118,12 +129,14 @@
         taskList.innerHTML = ""; // Очищаем текущий список
 
         // Создаем элементы списка для каждой задачи
-        tasks.forEach((task, index) => {
-          const taskItem = document.createElement("li");
-          taskItem.textContent = task;
-          taskList.appendChild(taskItem);
+        tasks.forEach(({ id, text, completed }) => {
+          // const taskItem = document.createElement("li");
+          // taskItem.textContent = task;
+          // taskList.appendChild(taskItem);
+          taskList.innerHTML += `
+          <div class = 'task' id = '${id}'>${text}</div>
+          `;
         });
-
         taskList.classList.remove("hidden"); // Показываем список задач
       }
     </script>
