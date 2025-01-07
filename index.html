@@ -18,7 +18,9 @@
       <!-- Форма для ввода новой задачи (изначально скрыта) -->
       <form class="task-form hidden" id="task-form">
         <!-- Кнопка закрытия формы -->
-        <button class="close-form-btn" id="close-form-btn">x</button>
+        <button class="close-form-btn" id="close-form-btn" type="button">
+          x
+        </button>
         <!-- Поле ввода для задачи -->
         <input
           type="text"
@@ -39,8 +41,8 @@
           <h3>Are you sure?</h3>
           <div class="dialog-buttons-container">
             <!-- Кнопки управления диалоговым окном -->
-            <button id="dialog-close-btn">Close</button>
-            <button id="dialog-cancel-btn">Cancel</button>
+            <button id="dialog-close-btn" type="button">Close</button>
+            <button id="dialog-cancel-btn" type="button">Cancel</button>
           </div>
         </form>
       </dialog>
@@ -75,6 +77,7 @@
       // Обработчик клика по кнопке "Close" в диалоговом окне
       dialogCloseBtn.addEventListener("click", () => {
         closeFormDialog.close(); // Закрываем диалоговое окно
+        taskInput.value = ""; // Очищаем поле ввода
         taskForm.classList.add("hidden"); // Скрываем форму
         taskList.classList.remove("hidden"); // Показываем список задач
       });

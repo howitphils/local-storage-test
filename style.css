@@ -15,19 +15,25 @@ html {
 }
 
 button {
+  position: relative;
+  bottom: 0px;
   background-color: #f1f1f1;
   border: none;
   color: #333;
-  font-size: 16px;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
   cursor: pointer;
   border-radius: 5px;
   background: #e6e4e4;
   padding: 10px;
+  transition: all 0.2s ease;
 }
 
 button:hover {
+  bottom: 2px;
   background-color: #cabfbf;
-  transition: all 0.3s ease;
+  box-shadow: 2px 2px 3px #a3a2a2;
 }
 
 .wrapper {
@@ -41,28 +47,32 @@ button:hover {
 
 .task-form {
   display: flex;
+  width: 25%;
   flex-direction: column;
-  gap: 20px;
+  gap: 40px;
   padding: 15px;
   border-radius: 5px;
-  box-shadow: 0px 0px 10px #beb3b3;
+  box-shadow: 0px 0px 5px #beb3b3;
 }
 
 .close-form-btn {
-  width: 15%;
+  width: 10%;
   align-self: flex-end;
   padding: 3px;
 }
 .task-input {
+  position: relative;
+  bottom: 0px;
   padding: 10px;
   width: 100%;
   border-radius: 5px;
   border: none;
   outline: none;
-  box-shadow: 1px 1px 5px #beb3b3;
+  transition: all 0.3s ease;
 }
 .task-input:focus {
-  box-shadow: 5px 5px 20px #cabfbf;
+  box-shadow: 0px 0px 10px #cabfbf;
+  bottom: 3px;
 }
 
 .submit-task-btn {
