@@ -10,29 +10,49 @@
   </head>
   <body>
     <!-- Основной контейнер приложения -->
-    <div class="wrapper">
+    <div class="wrapper flex-column-center">
       <!-- Кнопка для добавления новой задачи -->
       <button class="add-task-btn" id="add-task">Add new Task</button>
       <!-- Список для отображения задач -->
-      <ul class="task-list" id="task-list"></ul>
+      <ul class="task-list flex-column" id="task-list"></ul>
       <!-- Форма для ввода новой задачи (изначально скрыта) -->
-      <form class="task-form hidden" id="task-form">
+      <form class="task-form flex-column hidden" id="task-form">
         <!-- Кнопка закрытия формы -->
         <button class="close-form-btn" id="close-form-btn" type="button">
           x
         </button>
-        <!-- Поле ввода для задачи -->
-        <div class="task-input-container">
-          <label for="task" class="task-label">Task:</label>
-          <input
-            type="text"
-            id="task"
-            name="task"
-            class="task-input"
-            required
-            placeholder="Enter your task"
-          />
-          <span id="error" class="error"></span>
+        <div class="inputs-wrapper flex-column">
+          <!-- Поле ввода для задачи -->
+          <div class="input-container flex-column">
+            <label for="task" class="task-label">Task:</label>
+            <input
+              type="text"
+              id="task"
+              name="task"
+              class="task-input"
+              required
+              placeholder="Enter your task"
+            />
+            <span id="error" class="error"></span>
+          </div>
+          <div class="input-container">
+            <label for="date-input">Deadline date:</label>
+            <input
+              type="date"
+              required
+              id="date-input"
+              name="date"
+              class="date-input"
+            />
+          </div>
+          <div class="input-container">
+            <label for="description">Description:</label>
+            <textarea
+              id="description"
+              name="description"
+              class="description-input"
+            ></textarea>
+          </div>
         </div>
         <!-- Кнопка подтверждения добавления задачи -->
         <button type="submit" class="submit-task-btn" id="submit-task">
@@ -41,7 +61,7 @@
       </form>
       <!-- Диалоговое окно подтверждения закрытия формы -->
       <dialog class="close-form-dialog" id="close-form-dialog">
-        <form method="dialog">
+        <form method="dialog" class="flex-column-center">
           <h3>Close without saving?</h3>
           <div class="dialog-buttons-container">
             <!-- Кнопки управления диалоговым окном -->
@@ -64,12 +84,16 @@
       const dialogCloseBtn = document.getElementById("dialog-close-btn");
       const dialogCancelBtn = document.getElementById("dialog-cancel-btn");
       const error = document.getElementById("error");
+      const deadlineInput = document.getElementById("date-input");
+      const descriptionInput = document.getElementById("description");
+      console.log("hi");
 
       // Массив для хранения задач
       const tasks = [];
 
       // Обработчик клика по кнопке "Add new Task"
       addTaskBtn.addEventListener("click", () => {
+        console.log("Add task button clicked"); // Add this to debug
         taskForm.classList.remove("hidden"); // Показываем форму
         taskList.classList.add("hidden"); // Скрываем список задач
       });
@@ -108,23 +132,30 @@
         taskList.innerHTML = ""; // Очищаем текущий список
 
         // Создаем элементы списка для каждой задачи
-        tasks.forEach(({ id, text, completed }) => {
-          // const taskItem = document.createElement("li");
-          // taskItem.textContent = task;
-          // taskList.appendChild(taskItem);
-          taskList.innerHTML += `
-          <div class = 'task-container' id = '${id}'>
+        tasks.forEach(
+          ({ id, text, completed, date, deadline, description }) => {
+            // const taskItem = document.createElement("li");
+            // taskItem.textContent = task;
+            // taskList.appendChild(taskItem);
+            taskList.innerHTML += `
+          <li class = 'task-container flex-column' id = '${id}'>
             <div class = 'task-text-container'>
               <p>${text}</p>
               <input type = 'checkbox' class = 'complete-task-checkbox' id = 'complete-task'>
             </div>
+            <div>
+              <p>${date}</p>
+              <p>${deadline}</p>
+              <p>${description}</p>
+            </div>
             <div class = 'task-buttons-container'>
               <button class = 'edit-task-btn' id = 'edit-task'>Edit</button>
-              <button class = 'delete-task-btn' id = 'delete-task' onclick = "deleteTask(this)">Delete</button>  
+              <button class = 'delete-task-btn' id = 'delete-task' onclick = "deleteTask(this)">Delete</button>
             </div>
-          </div>
+          </li>
           `;
-        });
+          }
+        );
       }
 
       function reset() {
@@ -135,27 +166,32 @@
       }
 
       function createNewTask() {
+        // Проверка на пустую строку
         if (taskInput.value.trim() === "") {
-          // Проверка на пустую строку
           error.innerText = "Task cannot be empty!"; // Выводим ошибку
           taskInput.value = ""; // Очищаем поле ввода
           return false;
         }
 
+        // Создаем новую задачу
         const newTask = {
-          // Создаем новую задачу
           id: taskInput.value + Date.now(),
           text: taskInput.value.trim(),
+          date: new Date().toLocaleString(),
+          deadline: deadlineInput.value,
+          description: descriptionInput.value,
           completed: false,
         };
 
-        const isTaskExists = // Проверка на существующую задачу
+        // Проверка на существующую задачу
+        const isTaskExists =
           tasks.findIndex((task) => task.text === newTask.text) !== -1;
         if (isTaskExists) {
           error.innerText = "Task already exists!"; // Выводим ошибку
           return false;
         }
-        tasks.unshift(newTask); // Добавляем задачу в массив
+        // Добавляем задачу в массив и возвращаем true при успешном добавлении
+        tasks.unshift(newTask);
         return true;
       }
     </script>

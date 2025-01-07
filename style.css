@@ -14,6 +14,18 @@ html {
   background-color: #fafafa;
 }
 
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-column-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 button {
   position: relative;
   bottom: 0px;
@@ -37,18 +49,12 @@ button:hover {
 }
 
 .wrapper {
-  display: flex;
   padding: 10px 0px;
-  flex-direction: column;
   gap: 20px;
-  justify-content: center;
-  align-items: center;
 }
 
 .task-form {
-  display: flex;
   width: 25%;
-  flex-direction: column;
   gap: 40px;
   padding: 15px;
   border-radius: 5px;
@@ -61,16 +67,21 @@ button:hover {
   align-self: flex-end;
   padding: 3px;
 }
-.task-input-container {
-  display: flex;
-  flex-direction: column;
+
+.inputs-wrapper {
+  gap: 20px;
+}
+
+.input-container {
   gap: 10px;
 }
-.task-label {
+
+.input-container label {
   font-size: 14px;
   font-weight: 600;
   text-transform: uppercase;
 }
+
 .task-input {
   position: relative;
   bottom: 0px;
@@ -79,7 +90,7 @@ button:hover {
   border-radius: 5px;
   border: none;
   outline: none;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 }
 .task-input:focus {
   box-shadow: 0px 0px 20px #cabfbf;
@@ -90,6 +101,21 @@ button:hover {
   font-size: 14px;
   font-weight: bold;
   align-self: center;
+}
+
+.date-input {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  outline: none;
+}
+
+.description-input {
+  height: 100px;
+  width: 100%;
+  resize: none;
 }
 
 .submit-task-btn {
@@ -107,10 +133,6 @@ button:hover {
   border: 1px solid #beb3b3;
 }
 .close-form-dialog form {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   gap: 20px;
   text-align: center;
 }
@@ -120,17 +142,14 @@ button:hover {
 }
 
 .task-list {
-  display: flex;
-  flex-direction: column;
+  list-style: none;
   gap: 20px;
   width: 20%;
 }
 
 .task-container {
   padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+  gap: 30px;
   border: 1px solid #d6d3d3;
   border-radius: 5px;
   box-shadow: 0px 0px 5px #beb3b3;
