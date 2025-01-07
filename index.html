@@ -101,11 +101,6 @@
       // Обработчик отправки формы
       taskForm.addEventListener("submit", (e) => {
         e.preventDefault(); // Предотвращаем стандартную отправку формы
-        const newTask = {
-          id: taskInput.value + Date.now(),
-          text: taskInput.value,
-          completed: false,
-        };
         if (taskInput.value.trim() === "") {
           // Проверка на пустую строку
           error.innerText = "Task cannot be empty!"; // Выводим ошибку
@@ -117,7 +112,12 @@
           error.innerText = "Task already exists!"; // Выводим ошибку
           return;
         }
-        tasks.push(newTask); // Добавляем задачу в массив
+        const newTask = {
+          id: taskInput.value + Date.now(),
+          text: taskInput.value,
+          completed: false,
+        };
+        tasks.unshift(newTask); // Добавляем задачу в массив
         taskInput.value = ""; // Очищаем поле ввода
         error.innerText = ""; // Очищаем сообщение об ошибке
         taskForm.classList.add("hidden"); // Скрываем форму
@@ -134,10 +134,24 @@
           // taskItem.textContent = task;
           // taskList.appendChild(taskItem);
           taskList.innerHTML += `
-          <div class = 'task' id = '${id}'>${text}</div>
+          <div class = 'task-container' id = '${id}'>
+            <div class = 'task-text-container'>
+              <p>${text}</p>
+              <input type = 'checkbox' class = 'complete-task-checkbox' id = 'complete-task'>
+            </div>
+            <div class = 'task-buttons-container'>
+              <button class = 'edit-task-btn' id = 'edit-task'>Edit</button>
+              <button class = 'delete-task-btn' id = 'delete-task' onclick = "deleteTask(this)">Delete</button>  
+            </div>
+          </div>
           `;
         });
         taskList.classList.remove("hidden"); // Показываем список задач
+      }
+
+      function reset() {
+        taskInput.value = "";
+        error.innerText = "";
       }
     </script>
   </body>
