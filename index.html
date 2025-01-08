@@ -42,7 +42,7 @@
               required
               id="date-input"
               name="date"
-              class="date-input"
+              class="task-input"
             />
           </div>
           <div class="input-container">
@@ -50,7 +50,7 @@
             <textarea
               id="description"
               name="description"
-              class="description-input"
+              class="task-input description-input"
             ></textarea>
           </div>
         </div>
@@ -86,7 +86,6 @@
       const error = document.getElementById("error");
       const deadlineInput = document.getElementById("date-input");
       const descriptionInput = document.getElementById("description");
-      console.log("hi");
 
       // Массив для хранения задач
       const tasks = [];
@@ -143,10 +142,19 @@
               <p>${text}</p>
               <input type = 'checkbox' class = 'complete-task-checkbox' id = 'complete-task'>
             </div>
-            <div>
-              <p>${date}</p>
-              <p>${deadline}</p>
-              <p>${description}</p>
+            <div class = "flex-column task-info-wrapper">
+              <div class = "task-info-container">
+                <span>Created at:</span>
+                <p>${date}</p>
+              </div>
+              <div class = "task-info-container">
+                <span >Deadline:</span>
+                <p>${deadline}</p>
+              </div>
+              <div class = "task-info-container">
+                <span>Description:</span>
+                <p>${description}</p>
+              </div>
             </div>
             <div class = 'task-buttons-container'>
               <button class = 'edit-task-btn' id = 'edit-task'>Edit</button>

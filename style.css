@@ -48,6 +48,24 @@ button:hover {
   box-shadow: 2px 2px 3px #7b7a7a;
 }
 
+.task-input,
+textarea {
+  position: relative;
+  bottom: 0px;
+  padding: 10px;
+  width: 100%;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+textarea:focus,
+.task-input:focus {
+  box-shadow: 0px 0px 20px #cabfbf;
+  bottom: 2px;
+}
+
 .wrapper {
   padding: 10px 0px;
   gap: 20px;
@@ -82,20 +100,6 @@ button:hover {
   text-transform: uppercase;
 }
 
-.task-input {
-  position: relative;
-  bottom: 0px;
-  padding: 10px;
-  width: 100%;
-  border-radius: 5px;
-  border: none;
-  outline: none;
-  transition: all 0.2s ease;
-}
-.task-input:focus {
-  box-shadow: 0px 0px 20px #cabfbf;
-  bottom: 2px;
-}
 .error {
   color: red;
   font-size: 14px;
@@ -144,21 +148,32 @@ button:hover {
 .task-list {
   list-style: none;
   gap: 20px;
-  width: 20%;
+  width: 100%;
 }
 
 .task-container {
   padding: 20px;
+  align-self: center;
+  width: 20%;
   gap: 30px;
   border: 1px solid #d6d3d3;
   border-radius: 5px;
   box-shadow: 0px 0px 5px #beb3b3;
 }
 
+.task-info-wrapper {
+  gap: 20px;
+}
+
 .task-text-container {
   display: flex;
   justify-content: space-between;
   border-bottom: 1px solid #e6e4e4;
+}
+
+.task-info-container {
+  display: flex;
+  justify-content: space-between;
 }
 
 .task-buttons-container {
