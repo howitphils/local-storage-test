@@ -88,7 +88,7 @@
       const descriptionInput = document.getElementById("description");
 
       // Массив для хранения задач
-      const tasks = [];
+      const tasks = JSON.parse(localStorage.getItem("data")) || [];
       // Объект для хранения задачи, которую нужно обновить
       let taskToUpdate = {};
 
@@ -96,7 +96,6 @@
       addTaskBtn.addEventListener("click", () => {
         taskForm.classList.remove("hidden"); // Показываем форму
         taskList.classList.add("hidden"); // Скрываем список задач
-        submitTaskBtn.innerText = "Add"; // Меняем текст кнопки добавления задачи если ранее был апдейт таски
       });
 
       // Обработчик клика по кнопке закрытия формы (X)
@@ -106,8 +105,6 @@
           deadlineInput.value !== taskToUpdate.deadline ||
           descriptionInput.value !== taskToUpdate.description;
         if (taskInput.value.trim() === "" || !isTaskUpdated) {
-          console.log("hi");
-
           reset(); // Очищаем форму и показываем список задач
           return;
         }
@@ -130,11 +127,60 @@
         e.preventDefault(); // Предотвращаем стандартную отправку формы
         const isSuccessful = createNewOrUpdateTask(); // Создаем новую задачу и добавляем в массив
         if (!isSuccessful) return; // Если задача не создана, то выводим ошибку и останавливаем выполнение
+        // Сохраняем задачи после создания новой задачи или апдейта существующей в localStorage
+        localStorage.setItem("tasks", JSON.stringify(tasks));
         reset(); // Очищаем форму
         renderTasks(); // Перерисовываем список задач
       });
 
       // Функция для отображения списка задач
+      function createNewOrUpdateTask() {
+        // Проверка на пустую строку
+        if (taskInput.value.trim() === "") {
+          error.innerText = "Task cannot be empty!"; // Выводим ошибку
+          taskInput.value = ""; // Очищаем поле ввода
+          return false;
+        }
+
+        // Обновляем задачу если объект taskToUpdate не пустой
+        if (taskToUpdate.id) {
+          // Находим индекс задачи в массиве
+          const taskIndex = tasks.findIndex(
+            (task) => task.id === taskToUpdate.id
+          );
+          // Обновляем задачу в массиве
+          tasks[taskIndex] = {
+            ...taskToUpdate,
+            text: taskInput.value.trim(),
+            deadline: deadlineInput.value,
+            description: descriptionInput.value,
+          };
+          // Очищаем объект задачи для обновления
+          taskToUpdate = {};
+          return true;
+        }
+
+        // Создаем новую задачу
+        const newTask = {
+          id: taskInput.value + Date.now(),
+          text: taskInput.value.trim(),
+          date: new Date().toLocaleString(),
+          deadline: deadlineInput.value,
+          description: descriptionInput.value,
+          completed: false,
+        };
+
+        // Проверка на существующую задачу
+        const isTaskExists =
+          tasks.findIndex((task) => task.text === newTask.text) !== -1;
+        if (isTaskExists) {
+          error.innerText = "Task already exists!"; // Выводим ошибку
+          return false;
+        }
+        // Добавляем задачу в массив и возвращаем true при успешном добавлении
+        tasks.unshift(newTask);
+        return true;
+      }
       function renderTasks() {
         taskList.innerHTML = ""; // Очищаем текущий список
 
@@ -181,50 +227,7 @@
         descriptionInput.value = ""; // Очищаем поле ввода описания
         taskForm.classList.add("hidden"); // Скрываем форму
         taskList.classList.remove("hidden"); // Показываем список задач
-      }
-
-      function createNewOrUpdateTask() {
-        // Проверка на пустую строку
-        if (taskInput.value.trim() === "") {
-          error.innerText = "Task cannot be empty!"; // Выводим ошибку
-          taskInput.value = ""; // Очищаем поле ввода
-          return false;
-        }
-
-        if (taskToUpdate.id) {
-          const taskIndex = tasks.findIndex(
-            (task) => task.id === taskToUpdate.id
-          );
-          tasks[taskIndex] = {
-            ...taskToUpdate,
-            text: taskInput.value.trim(),
-            deadline: deadlineInput.value,
-            description: descriptionInput.value,
-          };
-          taskToUpdate = {};
-          return true;
-        }
-
-        // Создаем новую задачу
-        const newTask = {
-          id: taskInput.value + Date.now(),
-          text: taskInput.value.trim(),
-          date: new Date().toLocaleString(),
-          deadline: deadlineInput.value,
-          description: descriptionInput.value,
-          completed: false,
-        };
-
-        // Проверка на существующую задачу
-        const isTaskExists =
-          tasks.findIndex((task) => task.text === newTask.text) !== -1;
-        if (isTaskExists) {
-          error.innerText = "Task already exists!"; // Выводим ошибку
-          return false;
-        }
-        // Добавляем задачу в массив и возвращаем true при успешном добавлении
-        tasks.unshift(newTask);
-        return true;
+        submitTaskBtn.innerText = "Add"; // Меняем текст кнопки добавления задачи если ранее был апдейт таски
       }
 
       // Функция для удаления задачи
@@ -240,7 +243,7 @@
         // Показываем форму и скрываем список задач
         taskForm.classList.remove("hidden");
         taskList.classList.add("hidden");
-        submitTaskBtn.innerText = "Edit Task"; // Меняем текст кнопки добавления задачи
+        submitTaskBtn.innerText = "Edit"; // Меняем текст кнопки добавления задачи
 
         // Получаем ID задачи из родительского элемента кнопки
         const taskId = button.parentElement.parentElement.id;
@@ -258,6 +261,10 @@
       }
 
       function completeTask(checkbox) {}
+
+      if (tasks.length) {
+        renderTasks();
+      }
     </script>
   </body>
 </html>
