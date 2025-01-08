@@ -88,7 +88,7 @@
       const descriptionInput = document.getElementById("description");
 
       // Массив для хранения задач
-      const tasks = JSON.parse(localStorage.getItem("data")) || [];
+      const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
       // Объект для хранения задачи, которую нужно обновить
       let taskToUpdate = {};
 
@@ -235,6 +235,7 @@
         const taskId = button.parentElement.parentElement.id; // Получаем ID задачи
         const taskIndex = tasks.findIndex((task) => task.id === taskId); // Находим индекс задачи
         tasks.splice(taskIndex, 1); // Удаляем задачу из массива
+        localStorage.setItem("tasks", JSON.stringify(tasks)); // Сохраняем массив задач в localStorage после удаления
         renderTasks(); // Перерисовываем список задач
       }
 
