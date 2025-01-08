@@ -89,17 +89,25 @@
 
       // Массив для хранения задач
       const tasks = [];
+      // Объект для хранения задачи, которую нужно обновить
+      let taskToUpdate = {};
 
       // Обработчик клика по кнопке "Add new Task"
       addTaskBtn.addEventListener("click", () => {
-        console.log("Add task button clicked"); // Add this to debug
         taskForm.classList.remove("hidden"); // Показываем форму
         taskList.classList.add("hidden"); // Скрываем список задач
+        submitTaskBtn.innerText = "Add"; // Меняем текст кнопки добавления задачи если ранее был апдейт таски
       });
 
       // Обработчик клика по кнопке закрытия формы (X)
       closeFormBtn.addEventListener("click", () => {
-        if (taskInput.value.trim() === "") {
+        const isTaskUpdated =
+          taskInput.value !== taskToUpdate.text ||
+          deadlineInput.value !== taskToUpdate.deadline ||
+          descriptionInput.value !== taskToUpdate.description;
+        if (taskInput.value.trim() === "" || !isTaskUpdated) {
+          console.log("hi");
+
           reset(); // Очищаем форму и показываем список задач
           return;
         }
@@ -120,7 +128,7 @@
       // Обработчик отправки формы
       taskForm.addEventListener("submit", (e) => {
         e.preventDefault(); // Предотвращаем стандартную отправку формы
-        const isSuccessful = createNewTask(); // Создаем новую задачу и добавляем в массив
+        const isSuccessful = createNewOrUpdateTask(); // Создаем новую задачу и добавляем в массив
         if (!isSuccessful) return; // Если задача не создана, то выводим ошибку и останавливаем выполнение
         reset(); // Очищаем форму
         renderTasks(); // Перерисовываем список задач
@@ -140,7 +148,7 @@
           <li class = 'task-container flex-column' id = '${id}'>
             <div class = 'task-text-container'>
               <p>${text}</p>
-              <input type = 'checkbox' class = 'complete-task-checkbox' id = 'complete-task'>
+              <input type = 'checkbox' onchange = "completeTask(this)" class = 'complete-task-checkbox' id = 'complete-task'>
             </div>
             <div class = "flex-column task-info-wrapper">
               <div class = "task-info-container">
@@ -157,7 +165,7 @@
               </div>
             </div>
             <div class = 'task-buttons-container'>
-              <button class = 'edit-task-btn' id = 'edit-task'>Edit</button>
+              <button class = 'edit-task-btn' id = 'edit-task' onclick = "editTask(this)">Edit</button>
               <button class = 'delete-task-btn' id = 'delete-task' onclick = "deleteTask(this)">Delete</button>
             </div>
           </li>
@@ -169,16 +177,32 @@
       function reset() {
         taskInput.value = ""; // Очищаем поле ввода
         error.innerText = ""; // Очищаем ошибку
+        deadlineInput.value = ""; // Очищаем поле ввода дедлайна
+        descriptionInput.value = ""; // Очищаем поле ввода описания
         taskForm.classList.add("hidden"); // Скрываем форму
         taskList.classList.remove("hidden"); // Показываем список задач
       }
 
-      function createNewTask() {
+      function createNewOrUpdateTask() {
         // Проверка на пустую строку
         if (taskInput.value.trim() === "") {
           error.innerText = "Task cannot be empty!"; // Выводим ошибку
           taskInput.value = ""; // Очищаем поле ввода
           return false;
+        }
+
+        if (taskToUpdate.id) {
+          const taskIndex = tasks.findIndex(
+            (task) => task.id === taskToUpdate.id
+          );
+          tasks[taskIndex] = {
+            ...taskToUpdate,
+            text: taskInput.value.trim(),
+            deadline: deadlineInput.value,
+            description: descriptionInput.value,
+          };
+          taskToUpdate = {};
+          return true;
         }
 
         // Создаем новую задачу
@@ -202,6 +226,38 @@
         tasks.unshift(newTask);
         return true;
       }
+
+      // Функция для удаления задачи
+      function deleteTask(button) {
+        const taskId = button.parentElement.parentElement.id; // Получаем ID задачи
+        const taskIndex = tasks.findIndex((task) => task.id === taskId); // Находим индекс задачи
+        tasks.splice(taskIndex, 1); // Удаляем задачу из массива
+        renderTasks(); // Перерисовываем список задач
+      }
+
+      // Функция для редактирования задачи
+      function editTask(button) {
+        // Показываем форму и скрываем список задач
+        taskForm.classList.remove("hidden");
+        taskList.classList.add("hidden");
+        submitTaskBtn.innerText = "Edit Task"; // Меняем текст кнопки добавления задачи
+
+        // Получаем ID задачи из родительского элемента кнопки
+        const taskId = button.parentElement.parentElement.id;
+        // Находим индекс задачи в массиве tasks
+        const taskIndex = tasks.findIndex((task) => task.id === taskId);
+        // Получаем объект задачи
+        const task = tasks[taskIndex];
+        // Заполняем поля формы данными из найденной задачи
+        taskInput.value = task.text;
+        deadlineInput.value = task.deadline;
+        descriptionInput.value = task.description;
+
+        // Сохраняем объект задачи в глобальной переменной
+        taskToUpdate = task;
+      }
+
+      function completeTask(checkbox) {}
     </script>
   </body>
 </html>
